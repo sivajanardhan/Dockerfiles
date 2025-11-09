@@ -1,9 +1,16 @@
 FROM almalinux:8
-RUN rm -rf /usr/share/nginx/html/index.html
-# files should be available in current directory where Dockerfile exist
-#COPY index.html /usr/share/nginx/html/index.html
-COPY  qi/ /usr/share/nginx/html/
 
+# Install nginx
+RUN yum install -y nginx
 
+# Remove default page (optional)
+RUN rm -rf /usr/share/nginx/html/*
 
+# Copy your custom website files (ensure qi/ folder exists in same dir)
+COPY qi/ /usr/share/nginx/html/
 
+# Expose port 80
+EXPOSE 80
+
+# Run nginx in foreground (so container stays alive)
+CMD ["nginx", "-g", "daemon off;"]
